@@ -28,7 +28,7 @@ namespace Flights_Create_Book
             {
                 options.AddPolicy("MyCors", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("http://localhost:4200","https://xedric-dev.github.io").AllowAnyHeader().AllowAnyMethod();
                 });
             });
 
