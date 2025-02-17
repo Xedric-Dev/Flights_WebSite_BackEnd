@@ -1,6 +1,7 @@
 using Flights_Create_Book.Data;
 using Flights_Create_Book.Repo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Flights_Create_Book
 {
@@ -8,11 +9,16 @@ namespace Flights_Create_Book
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-            
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("FlightsDb"));
 
-            builder.Services.AddDbContext<UserDbContext>(options => options.UseInMemoryDatabase("UsersDb"));
+            var builder = WebApplication.CreateBuilder(args);
+
+            var connectionString = builder.Configuration.GetConnectionString("Database");
+
+            builder.Services.AddDbContext<AppDbContext>(
+                options => options.UseSqlServer(connectionString, o => o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "flights")));
+
+            builder.Services.AddDbContext<UserDbContext>(
+                options => options.UseSqlServer(connectionString, o => o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "user")));
 
             builder.Services.AddScoped<IFlightRepository, FlightRepository>();
 
